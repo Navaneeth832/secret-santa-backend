@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gift Exchange!</title>
+    <style>
+        
+        body {
+                background-image: url("https://i.postimg.cc/L8Gw4jC3/image.png"); /* Use your image file name */
+                background-size: 50%; /* Ensures the image covers the entire page */
+                background-repeat: repeat; /* Prevents tiling */
+                background-attachment: fixed; /* Keeps the image fixed during scroll */
+                background-position: left; /* Centers the image */
+
+        }
+
+        
+        .submit {
+            height: 30px;
+            width: 70px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            background-color: rgb(255, 145, 0);
+            color: white;
+            margin-inline: 20px;
+            margin-top: 20px;
+        }
+        .submit:hover {
+            background-color: rgb(244, 183, 14);
+        }
+        .submit:active {
+            background-color: rgb(255, 98, 0);
+        }
+        .t {
+            margin-inline: 20px;
+            margin-top: 20px;
+            height: 35px;
+            border: none;
+        }
+        header {
+            font-size: 300%;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            font-style: italic;
+            color: black;
+            
+        }
+        img {
+            width: 250px;
+            max-width: 100%;
+            height: auto;
+            margin: 12px;
+            border-radius: 125px;
+            border: rgb(160, 160, 251);
+        }
+        .highlight {
+            background-color: white; /* White background for highlighting */
+            padding: 10px; /* Add space around the text */
+            border-radius: 8px; /* Rounded corners */
+            display: inline-block; /* Shrinks the box to fit the text */
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
+            font-size: 120%; /* Adjust font size if needed */
+        }
+    </style>
+</head>
+<body>
+    <header>Christmas Gift Exchange!!</header>
+    <img src="https://i.postimg.cc/76d5fqhj/santa-image.avif"><br>
+    <input id="name" placeholder="Enter your name" class="t"><br>
+    <button class="submit" onclick="submitName()">SUBMIT</button>
+    <p id="response" class="highlight" style="margin-inline: 20px; margin-top: 10px; font-size: 120%;"></p>
+
+    <script>
+        function submitName() {
+            const name = document.getElementById("name").value;
+            fetch("/get_friend", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: `name=${name}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                const responseElement = document.getElementById("response");
+                if (data.error) {
+                    responseElement.textContent = data.error;
+                    responseElement.style.color = "red";
+                } else {
+                    responseElement.textContent = `Your Christmas friend is: ${data.friend}`;
+                    responseElement.style.color = "green";
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+        }
+    </script>
+</body>
+</html>
